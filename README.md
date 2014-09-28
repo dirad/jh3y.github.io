@@ -1,7 +1,5 @@
 #jh3y.github.io
 
-personal thoughts and goings on.
+The site of me!
 
-made with my hands using DocPad.
-
-@jh3y
+__@jh3y__
