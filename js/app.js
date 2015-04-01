@@ -88,7 +88,6 @@
       oN.setUpNavigationShowBehavior();
       oN.setUpScrollingBehavior();
       oN.setUpNavInternalLinkHandling();
-      console.info(initMessage);
     };
     return oN;
   }(octoNav || {}));
@@ -114,4 +113,17 @@ window.octoNav.init();
       $quoteContainer.find('.quote').first().addClass('show');
     }
   });
+  // var fading = $('header'),
+  //   fadeStart = 100,
+  //   fadeUntil = fading.height() - 100;
+  // $('[octo-nav-page-content] > [octo-nav-scrollable]').on('scroll', function(){
+  //     var offset = $('[octo-nav-page-content] > [octo-nav-scrollable]').scrollTop(),
+  //         opacity = 0;
+  //     if (offset <= fadeStart ) {
+  //         opacity = 1;
+  //     } else if (offset <= fadeUntil) {
+  //         opacity = 1 - offset / fadeUntil;
+  //     }
+  //     fading.css('opacity', opacity);
+  // });
 }());

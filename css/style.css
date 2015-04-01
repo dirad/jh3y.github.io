@@ -266,6 +266,7 @@ header.octo-curtain {
   height: 600px;
   height: calc(100%);
   background-color: #e74c3c;
+  transition: all 0s ease 0s;
   overflow: hidden;
 }
 header[octo-curtain] > h1.octo-curtain-title,
