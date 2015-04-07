@@ -7,7 +7,7 @@
       $octoNavNavigation = $('[octo-nav-navigation]'),
       animationTime = 500,
       $scrollingPageContent = $('[octo-nav-page-content] > [octo-nav-scrollable]'),
-      $header = $('[octo-curtain]'),
+      $header = $('header'),
       $hiddenMenu = $('#hidden-menu'),
       hiddenMenu = document.getElementById('hidden-menu'),
       $menu = $('#menu'),
@@ -24,7 +24,7 @@
             $octoNavPageContent.find('[octo-nav-scrollable]')
               .stop(true, true)
               .animate({
-                scrollTop: $hash.offset().top + $hash.parent().scrollTop()
+                scrollTop: $scrollingPageContent.scrollTop() + $hash.offset().top
               }, animationTime);
             setTimeout(function(){
               $octoNav.removeClass('show-nav');
@@ -34,7 +34,7 @@
       });
     };
     oN.setUpNavigationShowBehavior = function () {
-      $hiddenMenu.on('click', function(event) {
+      $hiddenMenuCtrl.on('click', function(event) {
         $octoNav.toggleClass('show-nav');
       });
       $octoNavPageContent.on('click', function(event) {
@@ -49,27 +49,29 @@
       var sC = document.querySelectorAll('[octo-nav-page-content] > [octo-nav-scrollable]')[0],
         startingMargin = 50,
         scrollTop = 0,
-        height = $header.outerHeight(),
         scrollPos = 0,
+        scrollDirection = '',
         checkHeight = function() {
           var direction = '';
           if (sC.scrollTop > scrollTop) {
-            direction = 'DOWN';
+            scrollDirection = 'DOWN';
           } else if (sC.scrollTop < scrollTop) {
-            direction = 'UP';
+            scrollDirection = 'UP';
           }
           scrollTop = sC.scrollTop;
-          return direction;
+          return scrollDirection;
         },
         updating,
         update = function () {
+          height = $header.outerHeight();
           if ((sC.scrollTop > height) && (checkHeight().trim() === 'UP')) {
             hiddenMenu.className = 'fixed';
             if (startingMargin !== 0) {
+              // console.log('SHOWING')
               startingMargin = 0;
               hiddenMenu.setAttribute('style', 'top:' + startingMargin + 'px;');
             }
-          } else if (sC.scrollTop > height + 50) {
+          } else if (sC.scrollTop > height + 50 && scrollDirection === 'DOWN') {
             startingMargin = 50;
             hiddenMenu.setAttribute('style', 'top: -' + startingMargin + 'px;');
             hiddenMenu.className = 'fixed';
@@ -81,6 +83,7 @@
         };
       $(sC).on('scroll', function(event) {
         scrollPos = sC.scrollTop;
+        // console.log(sC.scrollTop);
         update();
       });
     };
@@ -95,35 +98,58 @@
 window.octoNav.init();
 
 ;(function(){
-  var $quoteContainer = $('.quotes'),
-    $next,
-    $current;
-  $('.fa-repeat').on('click', function(event) {
-    var $this = $(this);
-    $this.addClass('spin');
-    setTimeout(function() {
-      $this.removeClass('spin');
-    }, 250);
-    $current = $('.quote.show');
-    $next = $current.next();
-    $current.removeClass('show');
-    if ($next.hasClass('quote')) {
-      $next.addClass('show');
-    } else {
-      $quoteContainer.find('.quote').first().addClass('show');
+  var config = {
+    id: 'app',
+    particleLife: 300,
+    amount: 20,
+    star: {
+      size: {
+        upper: 50,
+        lower: 25
+      },
+      rotateLimit: 90,
+      points: 5,
+      innerRadius: 0.5,
+      borderColor: '#000',
+      fillColor: 'red',
     }
+  };
+
+  myCanvas = new ShootingStars(config);
+  myCanvas.flushPool();
+  myCanvas.render();
+
+  if (window.navigator.userAgent.indexOf('Trident') !== -1 ||
+      window.navigator.userAgent.indexOf('MSIE') !== -1 ||
+      window.navigator.userAgent.indexOf('Edge') !== -1) {
+    document.body.className += ' ie';
+  } else {
+    $('header').height(window.innerHeight);
+  }
+  $(window).on('resize', function() {
+    $('header').height(window.innerHeight);
   });
-  // var fading = $('header'),
-  //   fadeStart = 100,
-  //   fadeUntil = fading.height() - 100;
-  // $('[octo-nav-page-content] > [octo-nav-scrollable]').on('scroll', function(){
-  //     var offset = $('[octo-nav-page-content] > [octo-nav-scrollable]').scrollTop(),
-  //         opacity = 0;
-  //     if (offset <= fadeStart ) {
-  //         opacity = 1;
-  //     } else if (offset <= fadeUntil) {
-  //         opacity = 1 - offset / fadeUntil;
-  //     }
-  //     fading.css('opacity', opacity);
-  // });
+
+
+  var fadeStart = 100,
+    fadeUntil = 300,
+    fading = $('header h1');
+
+  $('[octo-nav-page-content] > [octo-nav-scrollable]').on('scroll', function(){
+    var offset = $('[octo-nav-page-content] > [octo-nav-scrollable]').scrollTop(),
+      opacity = 0;
+    if (offset <= fadeStart) {
+        opacity = 1;
+        uTop = 100;
+    } else if (offset <= fadeUntil) {
+        opacity = 1 - offset / fadeUntil;
+    }
+    if (offset > 0) {
+      uTop = 100 - (offset / 2);
+    }
+    fading.css({
+      'opacity': opacity,
+      'top': uTop
+    });
+  });
 }());
