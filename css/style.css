@@ -618,6 +618,9 @@ li[data-github-badge] iframe {
 footer {
   padding: 30px;
 }
+.windows .stars {
+  right: 18px;
+}
 .stars {
   position: relative;
   -webkit-transition-duration: 250ms;
@@ -666,9 +669,6 @@ header h1 i:hover {
 /*
   Required IE patch for canvas header and scrollbar visibility.
 */
-.ie [octo-nav-scrollable] {
-  -ms-overflow-style: none;
-}
 .ie header {
   height: 100vh;
 }

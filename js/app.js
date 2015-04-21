@@ -115,6 +115,10 @@ window.octoNav.init();
     }
   };
 
+  if (window.navigator.platform.toUpperCase().indexOf('WIN') !== -1) {
+    document.body.className += ' windows';
+  }
+
   myCanvas = new ShootingStars(config);
   myCanvas.flushPool();
   myCanvas.render();
