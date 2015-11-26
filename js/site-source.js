@@ -101,7 +101,9 @@ window.octoNav.init();
   var config = {
     id: 'app',
     particleLife: 300,
-    amount: 20,
+    particleRenderProbability: 0.95,
+    amount: 50,
+    resizePoll: 250,
     star: {
       size: {
         upper: 50,
@@ -111,7 +113,7 @@ window.octoNav.init();
       points: 5,
       innerRadius: 0.5,
       borderColor: '#000',
-      fillColor: 'red',
+      fillColor: 'red'
     }
   };
 

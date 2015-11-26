@@ -9341,6 +9341,7 @@ return jQuery;
     canvasId = config.id;
     defaults = {
       particleLife: 300,
+      particleRenderProbability: 0.05,
       amount: 5,
       resizePoll: 250,
       star: {
@@ -9363,6 +9364,7 @@ return jQuery;
     self.maxLife = self.options.particleLife;
     self.particles = [];
     self.particlePool = [];
+    self.particleProbability = self.options.particleRenderProbability;
     self.poolSize = self.options.amount;
     window.addEventListener('resize', debounce((function() {
       self.canvas.width = window.innerWidth;
@@ -9373,7 +9375,7 @@ return jQuery;
   };
 
   ShootingStars.prototype.flushPool = function() {
-    var canvas, getRandomFromRange, i, particlePool, particles, poolSize, rotation, size, that, _results;
+    var canvas, getRandomFromRange, i, particlePool, particles, poolSize, results, rotation, size, that;
     that = this;
     canvas = that.canvas;
     particlePool = that.particlePool = [];
@@ -9383,7 +9385,7 @@ return jQuery;
       poolSize = self.poolSize = poolSize / 2;
     }
     i = 0;
-    _results = [];
+    results = [];
     while (i < poolSize) {
       getRandomFromRange = function(max, min) {
         return Math.floor(Math.random() * (max - min + 1) + min);
@@ -9391,9 +9393,9 @@ return jQuery;
       size = getRandomFromRange(that.options.star.size.upper, that.options.star.size.lower);
       rotation = getRandomFromRange(that.options.star.rotateLimit, 0);
       particlePool.push(new Star(size, rotation, 5, size / 2, (size / 2) * that.options.star.innerRadius, this.options.star.borderColor, this.options.star.fillColor, Math.floor((Math.random() * canvas.width) + 1), Math.floor((Math.random() * canvas.height) + 1), that));
-      _results.push(i++);
+      results.push(i++);
     }
-    return _results;
+    return results;
   };
 
   ShootingStars.prototype.render = function() {
@@ -9405,7 +9407,7 @@ return jQuery;
     particles = that.particles;
     ctx.save();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (Math.random() > 0.95 && particles.length < that.poolSize && particlePool.length > 0) {
+    if (Math.random() > that.particleProbability && particles.length < that.poolSize && particlePool.length > 0) {
       particles.push(particlePool.shift());
     }
     p = 0;
